@@ -20,3 +20,25 @@ def with_connection(func):
             conn.commit()
             print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Transaction committed.")
             return result
+        except Exception as e:
+            if conn:
+                conn.rollback()
+                print(f"[ERROR] Transaction rolled back due to: {e}")
+            raise
+        finally:
+            if conn:
+                conn.close()
+                print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Database connection closed.")
+    return wrapper
+
+
+@with_connection
+def fetch_all_users(cursor):
+    """Fetch all users using an auto-managed database connection."""
+    cursor.execute("SELECT * FROM users;")
+    return cursor.fetchall()
+
+
+if __name__ == "__main__":
+    users = fetch_all_users()
+    print(users)
