@@ -23,3 +23,20 @@ def transaction(func):
             print(f"[ERROR] Transaction rolled back due to: {e}")
             raise
     return wrapper
+
+@transaction
+def add_user(conn, name):
+    """Insert a new user into the database."""
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO users(name) VALUES (?);", (name,))
+    return cursor.lastrowid
+
+
+if __name__ == "__main__":
+    conn = sqlite3.connect("users.db")
+
+    try:
+        user_id = add_user(conn, "Amanuel")
+        print("Inserted user ID:", user_id)
+    finally:
+        conn.close()
