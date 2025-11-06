@@ -22,4 +22,20 @@ def retry(attempts=3, delay=1):
                     time.sleep(delay)
         return wrapper
     return decorator
+@retry(attempts=3, delay=2)
+def unstable_query(conn):
+    """A sample function that simulates a failing database query."""
+    cursor = conn.cursor()
+    # Simulate a random failure (SQLite busy error)
+    cursor.execute("SELECT * FROM users;")  
+    return cursor.fetchall()
 
+
+if __name__ == "__main__":
+    conn = sqlite3.connect("users.db")
+
+    try:
+        users = unstable_query(conn)
+        print(users)
+    finally:
+        conn.close()
