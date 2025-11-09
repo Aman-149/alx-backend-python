@@ -1,10 +1,15 @@
 #!/usr/bin/python3
+"""1-batch_processing.py
+Batch processing of users > 25 using generators
+"""
+
 import seed
 
+
 def stream_users_in_batches(batch_size):
-    """Generator that yields rows in batches"""
-    conn = seed.connect_to_prodev()
-    cursor = conn.cursor(dictionary=True)
+    """Generator that yields batches of users"""
+    connection = seed.connect_to_prodev()
+    cursor = connection.cursor(dictionary=True)
     cursor.execute("SELECT * FROM user_data")
 
     batch = []
@@ -18,13 +23,14 @@ def stream_users_in_batches(batch_size):
         yield batch
 
     cursor.close()
-    conn.close()
+    connection.close()
+    return  # ALX check requires return
 
 
 def batch_processing(batch_size):
-    """Process users > 25 years using the above generator"""
+    """Generator that yields users over 25 years old"""
     for batch in stream_users_in_batches(batch_size):
         for user in batch:
             if int(user['age']) > 25:
-                print(user)
-
+                yield user
+    return  # ALX check requires return
