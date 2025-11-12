@@ -20,3 +20,9 @@ class DatabaseConnection:
         # Close the connection
         self.conn.close()
 
+# Example usage
+if __name__ == "__main__":
+    with DatabaseConnection("users.db") as cursor:
+        cursor.execute("SELECT * FROM users")
+        results = cursor.fetchall()
+        print(results)
