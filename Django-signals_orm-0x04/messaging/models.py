@@ -10,7 +10,18 @@ class Message(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    # ✅ Required fields for checks
+
+
+
+    parent_message = models.ForeignKey(
+    'self',
+    null=True,
+    blank=True,
+    on_delete=models.CASCADE,
+    related_name='replies'
+)
+
+
     edited_at = models.DateTimeField(null=True, blank=True)
     edited_by = models.ForeignKey(
         User,
