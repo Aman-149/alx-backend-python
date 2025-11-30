@@ -57,3 +57,16 @@ def inbox(request):
     )
 
     return render(request, "messaging/inbox.html", {"messages": messages})
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import Message
+
+
+@login_required
+def unread_messages(request):
+    # MUST contain: Message.unread.for_user(request.user)
+    messages = Message.unread.for_user(request.user)
+
+    return render(request, "messaging/unread_messages.html", {"messages": messages})
+
