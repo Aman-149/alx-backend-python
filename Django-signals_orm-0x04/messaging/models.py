@@ -10,7 +10,7 @@ class Message(models.Model):
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
-   
+    # ✅ Required fields for checks
     edited_at = models.DateTimeField(null=True, blank=True)
     edited_by = models.ForeignKey(
         User,
@@ -24,7 +24,7 @@ class Message(models.Model):
         return f"Message from {self.sender} to {self.receiver}"
 
 
-
+# ✅ Required model for message edit history
 class MessageHistory(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE, related_name="history")
     old_content = models.TextField()
@@ -41,7 +41,7 @@ class MessageHistory(models.Model):
         return f"History for Message {self.message.id} at {self.edited_at}"
 
 
-
+# ✅ Pre-save signal to log old content before updates
 @receiver(pre_save, sender=Message)
 def log_message_edit(sender, instance, **kwargs):
     if not instance.pk:
