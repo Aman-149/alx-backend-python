@@ -1,13 +1,17 @@
+from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from .models import Message
+from django.views.decorators.cache import cache_page
 
 @login_required
 def delete_user(request):
     user = request.user
     user.delete()
     return redirect('home')
-
+@login_required
+@cache_page(60) 
 def inbox(request):
     messages = (
         Message.objects.filter(receiver=request.user)   # REQUIRED ✔
