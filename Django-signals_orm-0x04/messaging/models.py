@@ -71,3 +71,43 @@ def log_message_edit(sender, instance, **kwargs):
             old_content=old_instance.content,
             edited_by=instance.edited_by
         )
+from django.db import models
+from django.contrib.auth.models import User
+
+
+class UnreadMessagesManager(models.Manager):
+    def for_user(self, user):
+        # MUST contain: read=False and .only()
+        return (
+            super()
+            .get_queryset()
+            .filter(receiver=user, read=False)
+            .only("id", "content", "sender", "timestamp")
+        )
+
+
+class Message(models.Model):
+    sender = models.ForeignKey(User, related_name="sent", on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name="received", on_delete=models.CASCADE)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    # REQUIRED BY TASK 4
+    read = models.BooleanField(default=False)
+
+    # REQUIRED BY TASK 3
+    parent_message = models.ForeignKey(
+        'self', null=True, blank=True,
+        related_name='replies',
+        on_delete=models.CASCADE
+    )
+
+    # Default manager
+    objects = models.Manager()
+
+    # Custom unread manager
+    unread = UnreadMessagesManager()
+
+    def __str__(self):
+        return f"{self.sender} -> {self.receiver}: {self.content[:20]}"
+
