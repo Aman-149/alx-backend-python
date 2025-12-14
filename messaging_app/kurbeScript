@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+minikube start
+kubectl cluster-info
+kubectl get pods -A
