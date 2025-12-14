@@ -1,6 +1,11 @@
 #!/bin/bash
-set -e
+# Kubernetes cluster startup script (theoretical)
 
-minikube start
-kubectl cluster-info
-kubectl get pods -A
+echo "Starting Minikube cluster..."
+echo "minikube start"
+
+echo "Checking cluster info..."
+echo "kubectl cluster-info"
+
+echo "Listing all pods..."
+echo "kubectl get pods -A"
