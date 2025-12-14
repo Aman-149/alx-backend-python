@@ -1,11 +1,17 @@
 #!/bin/bash
-# Kubernetes cluster startup script (theoretical)
+set -e
 
-echo "Starting Minikube cluster..."
-echo "minikube start"
+# Check if minikube is installed
+if ! command -v minikube >/dev/null 2>&1; then
+  echo "minikube is not installed"
+  exit 1
+fi
 
-echo "Checking cluster info..."
-echo "kubectl cluster-info"
+# Start Kubernetes cluster
+minikube start
 
-echo "Listing all pods..."
-echo "kubectl get pods -A"
+# Verify cluster is running
+kubectl cluster-info
+
+# Retrieve available pods
+kubectl get pods -A
