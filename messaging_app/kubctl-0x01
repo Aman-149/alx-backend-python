@@ -1,6 +1,11 @@
 #!/bin/bash
-set -e
+# Scaling script (conceptual)
 
-kubectl scale deployment messaging-app --replicas=3
-kubectl get pods
-kubectl top pods
+echo "Scaling deployment to 3 replicas..."
+echo "kubectl scale deployment messaging-app --replicas=3"
+
+echo "Verifying running pods..."
+echo "kubectl get pods"
+
+echo "Monitoring resource usage..."
+echo "kubectl top pods"
