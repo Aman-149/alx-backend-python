@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+kubectl apply -f blue_deployment.yaml
+kubectl rollout status deployment/messaging-blue
+kubectl get pods
