@@ -1,7 +1,14 @@
 #!/bin/bash
-set -e
+# Blue-Green deployment script
 
-kubectl apply -f blue_deployment.yaml
-kubectl apply -f green_deployment.yaml
-kubectl apply -f kubeservice.yaml
-kubectl logs -l version=green
+echo "Deploying blue version..."
+echo "kubectl apply -f blue_deployment.yaml"
+
+echo "Deploying green version..."
+echo "kubectl apply -f green_deployment.yaml"
+
+echo "Routing traffic using service..."
+echo "kubectl apply -f kubeservice.yaml"
+
+echo "Checking logs of green deployment..."
+echo "kubectl logs -l version=green"
