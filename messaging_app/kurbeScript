@@ -13,6 +13,7 @@ minikube start
 # Verify cluster is running
 kubectl cluster-info
 
+kubectl get nodes
 
 # Retrieve available pods
 kubectl get pods -A
