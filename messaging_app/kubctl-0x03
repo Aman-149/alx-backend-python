@@ -2,10 +2,21 @@
 # Rolling update script
 
 echo "Applying updated deployment..."
+kubectl apply -f blue_deployment.yaml
 echo "kubectl apply -f blue_deployment.yaml"
 
 echo "Monitoring rollout status..."
 echo "kubectl rollout status deployment/messaging-blue"
+kubectl rollout status deployment/messaging-app-blue
+
+SERVICE_IP=$(minikube service messaging-app --url | head -n1)
+
+echo "3. Testing for downtime using curl..."
+for i in {1..15}; do
+  curl -s -o /dev/null -w "%{http_code}\n" $SERVICE_IP || echo "Request failed!"
+  sleep 2
+done
 
 echo "Verifying pods..."
 echo "kubectl get pods"
+kubectl get pods -l app=messaging-app -o wide
