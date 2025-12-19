@@ -1,0 +1,79 @@
+pipeline {
+    agent any
+
+    environment {
+        PYTHON = '/usr/bin/python3'
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-cred') // Jenkins credentials for Docker Hub
+        DOCKER_IMAGE = "yetmgetaredahegn/messaging_app" // Replace with your Docker Hub username/repo
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main', 
+                    credentialsId: 'github-cred', // Jenkins credentials for GitHub
+                    url: 'https://github.com/yetmgetaredahegn/alx-backend-python.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                    cd messaging_app
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                '''
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh '''
+                    cd messaging_app
+                    . venv/bin/activate
+                    pytest --junitxml=test-results.xml
+                '''
+            }
+        }
+
+        stage('Report') {
+            steps {
+                junit 'messaging_app/test-results.xml' // Publishes test results to Jenkins
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                    cd messaging_app
+                    docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .
+                '''
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh '''
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                            docker tag ${DOCKER_IMAGE}:${BUILD_NUMBER} ${DOCKER_IMAGE}:latest
+                            docker push ${DOCKER_IMAGE}:${BUILD_NUMBER}
+                            docker push ${DOCKER_IMAGE}:latest
+                        '''
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up workspace...'
+            sh 'docker logout || true'
+            deleteDir() // Cleans the Jenkins workspace after the build
+        }
+    }
+}
