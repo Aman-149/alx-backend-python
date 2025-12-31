@@ -15,15 +15,13 @@ def connect_db():
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         return None
-
-
+# adding db
 def create_database(connection):
     """Create ALX_prodev database"""
     cursor = connection.cursor()
     cursor.execute("CREATE DATABASE IF NOT EXISTS ALX_prodev;")
     connection.commit()
     cursor.close()
-
 
 def connect_to_prodev():
     """Connect to ALX_prodev DB"""
