@@ -2,7 +2,6 @@
 import sqlite3
 import functools
 from datetime import datetime
-
 def transaction(func):
     """Decorator that manages database transactions (commit/rollback)."""
     @functools.wraps(func)
