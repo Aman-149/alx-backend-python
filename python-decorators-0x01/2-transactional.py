@@ -22,7 +22,6 @@ def transaction(func):
             print(f"[ERROR] Transaction rolled back due to: {e}")
             raise
     return wrapper
-
 @transaction
 def add_user(conn, name):
     """Insert a new user into the database."""
