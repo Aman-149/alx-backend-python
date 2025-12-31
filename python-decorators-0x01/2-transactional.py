@@ -30,7 +30,7 @@ def add_user(conn, name):
     return cursor.lastrowid
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":]
     conn = sqlite3.connect("users.db")
 
     try:
