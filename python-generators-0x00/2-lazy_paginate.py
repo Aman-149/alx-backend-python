@@ -9,7 +9,6 @@ def paginate_users(page_size, offset):
     connection.close()
     return rows
 
-
 def lazy_pagination(page_size):
     """Lazy load paginated data using one loop"""
     offset = 0
