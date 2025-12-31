@@ -13,7 +13,7 @@ def stream_user_ages():
     cursor.close()
     conn.close()
 
-
+# computr average
 def compute_average_age():
     total = 0
     count = 0
