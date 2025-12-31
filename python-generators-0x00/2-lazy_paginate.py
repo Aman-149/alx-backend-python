@@ -19,4 +19,3 @@ def lazy_pagination(page_size):
             break
         yield page
         offset += page_size
-
