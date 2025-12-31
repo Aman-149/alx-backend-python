@@ -29,3 +29,4 @@ if __name__ == "__main__":
     users = fetch_all_users(query="SELECT * FROM users;")
     print(users)
 
+#
