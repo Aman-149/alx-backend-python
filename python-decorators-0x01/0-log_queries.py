@@ -26,7 +26,6 @@ def fetch_all_users(query):
     conn.close()
     return results
 
-
 # Example run (will log the query before executing)
 if __name__ == "__main__":
     users = fetch_all_users(query="SELECT * FROM users;")
