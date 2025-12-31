@@ -14,6 +14,5 @@ def stream_users():
 
     for row in cursor:
         yield row
-
     cursor.close()
     connection.close()
